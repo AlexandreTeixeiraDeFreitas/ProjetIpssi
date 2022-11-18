@@ -4,7 +4,6 @@
 
 {% block body %}
     <h1>User</h1>
-
     <table class="table">
         <tbody>
             <tr>
@@ -29,7 +28,6 @@
             </tr>
         </tbody>
     </table>
-
     <a href="{{ path('app_user_edit', {'id': app.user.id}) }}">edit</a>
 
     {{ include('profil/_deleteprofil_form.html.twig') }}

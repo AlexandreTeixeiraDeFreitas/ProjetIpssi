@@ -16,7 +16,7 @@ class ArticleController extends AbstractController
 {
 
     #[Route('/', name: 'app_article_lastarticle', methods: ['GET'])]
-    public function lastarticle(ArticleRepository $articleRepository): Response
+    public function lastarticle(ArticleRepository $articleRepository, Request $request): Response
     {
         return $this->render('article/index.html.twig', [
             'articles' => $articleRepository-> findLastArticle('Publié'),
@@ -69,7 +69,11 @@ class ArticleController extends AbstractController
     {
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
+        $user = $this->getUser();
+        $roleChecker = $this->container->get('security.authorization_checker');
+        if ($article->getUser() != $user  && !$roleChecker->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_article_index');
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $articleRepository->save($article, true);
 
@@ -85,6 +89,11 @@ class ArticleController extends AbstractController
     #[Route('/article/delete/{id}', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, ArticleRepository $articleRepository): Response
     {
+        $user = $this->getUser();
+        $roleChecker = $this->container->get('security.authorization_checker');
+        if ($article->getUser() != $user  && !$roleChecker->isGranted('ROLE_ADMIN')){
+            return $this->redirectToRoute('app_article_index');
+        }
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $articleRepository->remove($article, true);
         }

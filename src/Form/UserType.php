@@ -16,11 +16,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
-    public function __construct(protected AuthorizationCheckerInterface $authorizationChecker)
-    {
-        
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -45,11 +40,6 @@ class UserType extends AbstractType
             ->add('nom')
             ->add('prenom') 
         ;
-        //if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
-            $builder
-                ->add('roles')
-                ;
-        //}
     }
 
     public function configureOptions(OptionsResolver $resolver): void

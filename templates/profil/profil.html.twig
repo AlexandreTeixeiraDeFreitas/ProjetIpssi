@@ -23,8 +23,8 @@
                 <td>{{ app.user.nom }}</td>
                 <td>{{ app.user.prenom }}</td>
                 <td>
+                    <a href="{{ path('app_profil_show') }}">show</a>
                     <a href="{{ path('app_profil_edit') }}">edit</a>
-                    <a href="{{ path('app_profil_delete') }}">delete</a>
                 </td>
             </tr>
         {% else %}
@@ -35,7 +35,8 @@
         </tbody>
     </table>
     {% if is_granted('ROLE_ADMIN') %}
-    <h1>User index</h1>
+    <hr>
+    <h1>tous les utilisateurs</h1>
 
     <table class="table">
         <thead>
@@ -49,7 +50,6 @@
             </tr>
         </thead>
         <tbody>
-            {{ dump(users) }}
         {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
@@ -58,7 +58,7 @@
                 <td>{{ user.nom }}</td>
                 <td>{{ user.prenom }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                                    <a href="{{ path('app_profil_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
                 </td>
             </tr>
@@ -70,12 +70,8 @@
         </tbody>
     </table>
     {% endif %}
-
-
-    {% if is_granted('ROLE_ADMIN') %}
-        <h1>Article index</h1>
-    {% else %}
-        <h1>Vos Article</h1>
+    <hr>
+    <h1>Vos Article</h1>
 
     <table class="table">
         <thead>
@@ -98,7 +94,7 @@
                 <td>{{ article.description }}</td>
                 <td>{{ article.contenu }}</td>
                 <td>{{ article.datedecreation ? article.datedecreation|date('Y-m-d') : '' }}</td>
-                <td>{{article.user.nom}}</td>
+                <td>{{ article.user.nom }}</td>
                 <td>{{ article.statut }}</td>
                 <td>
                     <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
@@ -112,6 +108,5 @@
         {% endfor %}
         </tbody>
     </table>
-    {% endif %}
     <a href="{{ path('app_article_new') }}">Create new</a>
 {% endblock %}
