@@ -29,7 +29,7 @@
             </tr>
             <tr>
                 <th>Auteur</th>
-                <td>{{ article.auteur }}</td>
+                <td><a href="/user/{{article.user.id}}">{{article.user.nom}}</a></td>
             </tr>
             <tr>
                 <th>Statut</th>
@@ -39,8 +39,13 @@
     </table>
 
     <a href="{{ path('app_article_index') }}">back to list</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
 
-    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+        {{ include('article/_delete_form.html.twig') }}
+    {% elseif article.user == app.user %}
+        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
 
-    {{ include('article/_delete_form.html.twig') }}
+        {{ include('article/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

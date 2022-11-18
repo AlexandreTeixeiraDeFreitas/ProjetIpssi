@@ -26,11 +26,13 @@ class Article
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $datedecreation = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $auteur = null;
 
     #[ORM\Column(length: 10)]
     private ?string $statut = null;
+
+    #[ORM\ManyToOne]
+    private ?User $User = null;
+
 
     public function getId(): ?int
     {
@@ -85,18 +87,6 @@ class Article
         return $this;
     }
 
-    public function getAuteur(): ?string
-    {
-        return $this->auteur;
-    }
-
-    public function setAuteur(string $auteur): self
-    {
-        $this->auteur = $auteur;
-
-        return $this;
-    }
-
     public function getStatut(): ?string
     {
         return $this->statut;
@@ -109,4 +99,16 @@ class Article
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): self
+    {
+        $this->User = $User;
+
+        return $this;
+    }
+    
 }

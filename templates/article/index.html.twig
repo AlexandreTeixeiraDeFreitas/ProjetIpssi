@@ -26,11 +26,16 @@
                 <td>{{ article.description }}</td>
                 <td>{{ article.contenu }}</td>
                 <td>{{ article.datedecreation ? article.datedecreation|date('Y-m-d') : '' }}</td>
-                <td>{{ article.auteur }}</td>
+                <td><a href="/user/{{article.user.id}}">{{article.user.nom}}</a></td>
                 <td>{{ article.statut }}</td>
                 <td>
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
+                        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                    {% elseif article.user == app.user %}
+                        <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
+                        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -40,6 +45,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_USER') %}
     <a href="{{ path('app_article_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Role\Role;
 
 #[Route('/')]
 class ArticleController extends AbstractController
@@ -36,8 +37,14 @@ class ArticleController extends AbstractController
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
+        $roleChecker = $this->container->get('security.authorization_checker');
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($roleChecker->isGranted('ROLE_USER') && !$roleChecker->isGranted('ROLE_ADMIN')) {
+                $article->setUser($user);
+            }
+            $article->setDatedecreation(new \DateTime('now'));
             $articleRepository->save($article, true);
 
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
