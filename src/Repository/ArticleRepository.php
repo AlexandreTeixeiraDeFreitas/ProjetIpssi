@@ -63,4 +63,68 @@ class ArticleRepository extends ServiceEntityRepository
            ->getResult()
        ;
    }
+   public function findArticle($titre, $user, $statut): array
+   {
+        if ($titre != NULL && $user != NULL && $statut != NULL){
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.titre LIKE :val')
+                ->andWhere('a.User = :val1')
+                ->andWhere('a.statut = :val2')
+                ->setParameter('val', "%" . $titre . "%")
+                ->setParameter('val1', $user)
+                ->setParameter('val2', $statut)
+                ->getQuery()
+                ->getResult()
+            ;
+        }elseif($titre == NULL && $user != NULL && $statut != NULL){
+            var_dump($user);
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.User = :val1')
+                ->andWhere('a.statut = :val2')
+                ->setParameter('val1', $user)
+                ->setParameter('val2', $statut)
+                ->getQuery()
+                ->getResult()
+            ;
+        }elseif($titre == NULL && $user == NULL && $statut != NULL){
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.statut = :val2')
+                ->setParameter('val2', $statut)
+                ->getQuery()
+                ->getResult()
+            ;
+        }elseif($titre == NULL && $user != NULL && $statut == NULL){
+            return $this->createQueryBuilder('a')
+            ->andWhere('a.User = :val1')
+            ->setParameter('val1', $user)
+            ->getQuery()
+            ->getResult()
+        ; 
+        }elseif($titre != NULL && $user == NULL && $statut == NULL){
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.titre LIKE :val')
+                ->setParameter('val', "%" . $titre . "%")
+                ->getQuery()
+                ->getResult()
+            ;
+        }elseif($titre != NULL && $user == NULL && $statut != NULL){
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.titre LIKE :val')
+                ->setParameter('val', "%" . $titre . "%")
+                ->andWhere('a.statut = :val2')
+                ->setParameter('val2', $statut)
+                ->getQuery()
+                ->getResult()
+            ;
+        }elseif($titre != NULL && $user != NULL && $statut == NULL){
+            return $this->createQueryBuilder('a')
+                ->andWhere('a.titre LIKE :val')
+                ->setParameter('val', "%" . $titre . "%")
+                ->andWhere('a.User = :val1')
+                ->setParameter('val1', $user)
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+   }
 }

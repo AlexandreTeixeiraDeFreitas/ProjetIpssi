@@ -4,19 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
+use App\Form\ShearchType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Role\Role;
 
 #[Route('/')]
 class ArticleController extends AbstractController
 {
 
     #[Route('/', name: 'app_article_lastarticle', methods: ['GET'])]
-    public function lastarticle(ArticleRepository $articleRepository, Request $request): Response
+    public function lastarticle(ArticleRepository $articleRepository): Response
     {
         return $this->render('article/index.html.twig', [
             'articles' => $articleRepository-> findLastArticle('Publié'),
@@ -99,5 +99,31 @@ class ArticleController extends AbstractController
         }
 
         return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/profil/shearch', name: 'app_profil_shearch', methods: ['GET', 'POST'])]
+    public function shearch(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $shearcharticle = new Article();
+        $form = $this->createForm(ShearchType::class, $shearcharticle,);
+        $form->handleRequest($request);
+        $shearcharticle = new Article();
+        $titre = $form->getData()->getTitre();
+        $user = $form->getData()->getUser();
+        $statut = $form->getData()->getStatut();
+        //var_dump($user);
+        if ($titre == NULL && $user == NULL && $statut == NULL ){
+            $article = $articleRepository-> findAll();
+        }else{
+            $article = $articleRepository->findArticle($titre, $user, $statut);
+        }
+
+
+        // var_dump($shearcharticle);
+
+
+        return $this->renderForm('profil/shearchAdmin.html.twig', [
+            'articles' => $article,
+            'form' => $form,
+        ]);
     }
 }

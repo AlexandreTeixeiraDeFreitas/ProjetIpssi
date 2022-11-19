@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Article;
 use App\Form\UserType;
 use App\Form\ArticleType;
+use App\Form\ShearchType;
 use App\Repository\UserRepository;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfilController extends AbstractController
 {
     #[Route('/profil', name: 'app_profil')]
-    public function profil(ArticleRepository $articleRepository, UserRepository $userRepository): Response
+    public function profil(Request $request, ArticleRepository $articleRepository, UserRepository $userRepository): Response
     {
         $id = $this->getUser();
         return $this->render('profil/profil.html.twig', [
@@ -97,4 +98,6 @@ class ProfilController extends AbstractController
             'user' => $user,
         ]);
     }
+
+
 }

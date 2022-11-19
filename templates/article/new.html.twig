@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Create new Article</h1>
-
+    {{ dump(form) }}
     {{ include('article/_form.html.twig') }}
 
     <a href="{{ path('app_article_index') }}">back to list</a>

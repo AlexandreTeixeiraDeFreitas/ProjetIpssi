@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}blog{% endblock %}
+{% block title %}Shearch Article{% endblock %}
 
 {% block body %}
+    <h1>Shearch Article</h1>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Shearch') }}</button>
+{{ form_end(form) }}
     <h1>Blog</h1>
     
     <table class="table">
@@ -19,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for article in articles %}
+        {% for article in articles|sort((a, b) => b.datedecreation <=> a.datedecreation) %}
             <tr>
                 <td>{{ article.id }}</td>
                 <td>{{ article.titre }}</td>
@@ -29,13 +34,8 @@
                 <td><a href="{{ path('app_user_show', {'id': article.user.id}) }}">{{article.user.nom}}</a></td>
                 <td>{{ article.statut }}</td>
                 <td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
-                    {% elseif article.user == app.user %}
-                        <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                        <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
-                    {% endif %}
+                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
+                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -45,7 +45,6 @@
         {% endfor %}
         </tbody>
     </table>
-    {% if is_granted('ROLE_USER') %}
-    <a href="{{ path('app_article_new') }}">Create new</a>
-    {% endif %}
+
+    <a href="{{ path('app_profil') }}">back</a>
 {% endblock %}
