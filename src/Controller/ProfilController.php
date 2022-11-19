@@ -61,7 +61,7 @@ class ProfilController extends AbstractController
         return $this->redirectToRoute('app_profil', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/profil/edit/{id}', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/admin/edit/{id}', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -79,7 +79,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
-    #[Route('/profil/delete/{id}', name: 'app_user_delete', methods: ['GET', 'POST'])]
+    #[Route('/admin/delete/{id}', name: 'app_user_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
         var_dump($user);
@@ -98,6 +98,26 @@ class ProfilController extends AbstractController
             'user' => $user,
         ]);
     }
-
+    #[Route('/admin/shearch', name: 'app_profil_shearch', methods: ['GET', 'POST'])]
+    public function shearch(Request $request, ArticleRepository $articleRepository): Response
+    {
+        $shearcharticle = new Article();
+        $form = $this->createForm(ShearchType::class, $shearcharticle,);
+        $form->handleRequest($request);
+        $shearcharticle = new Article();
+        $titre = $form->getData()->getTitre();
+        $user = $form->getData()->getUser();
+        $statut = $form->getData()->getStatut();
+        //var_dump($user);
+        if ($titre == NULL && $user == NULL && $statut == NULL ){
+            $article = $articleRepository-> findAll();
+        }else{
+            $article = $articleRepository->findArticle($titre, $user, $statut);
+        }
+        return $this->renderForm('profil/shearchAdmin.html.twig', [
+            'articles' => $article,
+            'form' => $form,
+        ]);
+    }
 
 }

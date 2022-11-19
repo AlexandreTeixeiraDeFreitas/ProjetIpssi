@@ -8,9 +8,11 @@
 
     <a href="{{ path('app_article_index') }}">back to blog</a>
     {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('app_article_index') }}">page profil</a>
-    <a href="{{ path('app_profil_shearch') }}">page blog admin</a>
+    <a href="{{ path('app_article_index') }}">page blog</a>
+    <a href="{{ path('app_profil') }}">page profil</a>
+    <a href="{{ path('app_profil_shearch') }}">page Shearch</a>
     {% elseif is_granted('ROLE_USER') %}
+    <a href="{{ path('app_article_index') }}">page blog</a>
     <a href="{{ path('app_profil') }}">page profil</a>
     {% endif %}
     {{ include('article/_delete_form.html.twig') }}
